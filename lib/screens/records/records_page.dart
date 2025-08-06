@@ -33,7 +33,7 @@ class _RecordsPageState extends State<RecordsPage> {
   }
 
   Future<void> fetchAppointments() async {
-    final patientAppointmentsUrl = Uri.parse(AppConfig.patientAppointmentsUrl(widget.patientId));
+    final patientAppointmentsUrl = Uri.parse(AppConfig.patientAppointmentsUrl(widget.patientId.toString()));
     print("🔄 Fetching appointments for patient ID: ${widget.patientId}");
     try {
       final response = await http.get(
