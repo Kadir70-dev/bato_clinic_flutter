@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../components/logo_section.dart';
+import 'config.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -32,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
       return;
     }
 
-    final url = Uri.parse('http://192.168.1.41:3000/api/auth/login');
+    final loginUrl = Uri.parse(AppConfig.loginUrl);
     final headers = {'Content-Type': 'application/json'};
     final body = jsonEncode({
       'mobileOrFile': mobileOrFile,

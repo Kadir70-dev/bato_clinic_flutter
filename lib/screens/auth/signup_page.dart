@@ -3,6 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../components/logo_section.dart';
+import 'config.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -23,7 +24,7 @@ class _SignupPageState extends State<SignupPage> {
   Future<void> _signup() async {
     setState(() => isLoading = true);
 
-    final url = Uri.parse('http://192.168.1.41:3000/api/auth/signup');
+    final signupUrl = Uri.parse(AppConfig.signupUrl);
     final body = jsonEncode({
       "name": nameController.text,
       "civilId": civilIdController.text,

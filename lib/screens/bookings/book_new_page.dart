@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
+import 'config.dart';
 
 class BookNewPage extends StatefulWidget {
   final int patientId;
@@ -48,7 +49,7 @@ class _BookNewPageState extends State<BookNewPage> {
 
     setState(() => isLoading = true);
 
-    final url = Uri.parse('http://192.168.1.41:3000/api/appointments');
+    final appointmentsUrl = Uri.parse(AppConfig.appointmentsUrl);
     final appointmentDate = _selectedDate!.toIso8601String().split('T')[0];
     final startDateTime = "$appointmentDate $_time";
     final endDateTime = "$appointmentDate 11:00"; // You can make this dynamic

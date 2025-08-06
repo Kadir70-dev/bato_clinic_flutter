@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'config.dart';
 
 class RecordsPage extends StatefulWidget {
   final int patientId;
@@ -32,7 +33,8 @@ class _RecordsPageState extends State<RecordsPage> {
   }
 
   Future<void> fetchAppointments() async {
-    final url = Uri.parse('http://192.168.1.41:3000/api/appointments/patient/${widget.patientId}');
+    final patientAppointmentsUrl = Uri.parse(AppConfig.patientAppointmentsUrl(widget.patientId));
+    print("🔄 Fetching appointments for patient ID: ${widget.patientId}");
     try {
       final response = await http.get(
         url,

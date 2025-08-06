@@ -35,3 +35,6 @@ web/.dart_tool/
 *.log
 *.lock
 
+
+# Local Netlify folder
+.netlify
