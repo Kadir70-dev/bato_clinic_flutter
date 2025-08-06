@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../components/logo_section.dart';
-import 'config.dart';
+import 'package:bato_clinic_app/config.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

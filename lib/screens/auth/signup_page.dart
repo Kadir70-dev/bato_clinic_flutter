@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../components/logo_section.dart';
-import 'config.dart';
+import 'package:bato_clinic_app/config.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});

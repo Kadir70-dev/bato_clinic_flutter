@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
-import 'config.dart';
+import 'package:bato_clinic_app/config.dart';
 
 class BookNewPage extends StatefulWidget {
   final int patientId;

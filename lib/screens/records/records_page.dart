@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'config.dart';
+import 'package:bato_clinic_app/config.dart';
 
 class RecordsPage extends StatefulWidget {
   final int patientId;
