@@ -46,8 +46,9 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     try {
-      print('📤 Sending POST request to $url');
-      final response = await http.post(url, headers: headers, body: body);
+      print('📤 Sending POST request to $loginUrl');
+      final response = await http.post(loginUrl, headers: headers, body: body);
+
       print('📥 Response received: ${response.statusCode}');
 
       if (response.statusCode == 200) {

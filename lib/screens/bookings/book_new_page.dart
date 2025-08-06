@@ -60,7 +60,7 @@ class _BookNewPageState extends State<BookNewPage> {
     print("👤 User data: ${widget.user}");
 
     final response = await http.post(
-      url,
+      appointmentsUrl,
       headers: {
         'Authorization': 'Bearer ${widget.token}',
         'Content-Type': 'application/json',

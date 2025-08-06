@@ -35,7 +35,7 @@ class _SignupPageState extends State<SignupPage> {
 
     try {
       final response = await http.post(
-        url,
+        signupUrl,
         headers: {"Content-Type": "application/json"},
         body: body,
       );

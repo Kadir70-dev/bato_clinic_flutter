@@ -37,7 +37,7 @@ class _RecordsPageState extends State<RecordsPage> {
     print("🔄 Fetching appointments for patient ID: ${widget.patientId}");
     try {
       final response = await http.get(
-        url,
+        patientAppointmentsUrl,
         headers: {
           'Authorization': 'Bearer ${widget.token}',
           'Content-Type': 'application/json',
