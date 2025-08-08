@@ -2,7 +2,7 @@
 
 class AppConfig {
   // Toggle this to switch between local and production
-  static const bool isProduction = false;
+  static const bool isProduction = true;
 
   // Local and production base URLs
   static const String localBaseUrl = 'http://192.168.1.112:3000';
