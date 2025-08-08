@@ -21,7 +21,7 @@ class RecordsPage extends StatefulWidget {
 
 class _RecordsPageState extends State<RecordsPage> {
   int selectedTab = 0;
-  final List<String> tabs = ["Reports", "Prescriptions", "Notes"];
+  final List<String> tabs = ["Medical reports", "Prescriptions","Invoices"];
 
   List<dynamic> appointments = [];
   bool isLoading = true;
@@ -66,7 +66,7 @@ class _RecordsPageState extends State<RecordsPage> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text("Medical History"),
+        title: const Text("Records"),
         elevation: 0,
         backgroundColor: Colors.white,
         foregroundColor: Colors.black,

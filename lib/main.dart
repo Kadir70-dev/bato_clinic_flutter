@@ -9,6 +9,7 @@ import 'screens/services/services_page.dart';
 import 'screens/bookings/book_new_page.dart';
 import 'screens/records/records_page.dart';
 import 'screens/profile/profile_page.dart';
+import 'screens/home/view_treatments_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
         '/signup': (context) => const SignupPage(),
         '/home': (context) => const HomePage(),
         '/services': (context) => const ServicesPage(),
+        '/view_treatments': (context) => const FullViewTreatmentsScreen(),
 
         // ✅ Provide dummy/default values if needed
         '/bookings': (context) => const BookNewPage(

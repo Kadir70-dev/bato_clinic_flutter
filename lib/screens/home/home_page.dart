@@ -18,7 +18,7 @@ class HomePage extends StatelessWidget {
             TextButton(
               child: const Text("Logout"),
               onPressed: () {
-                Navigator.of(dialogContext).pop(); // Close dialog
+                Navigator.of(dialogContext).pop();
                 _logout(context);
               },
             ),
@@ -109,13 +109,13 @@ class HomePage extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    if (user['id'] != null && args?['token'] != null) {
+                    if (user['id'] != null && token != null) {
                       Navigator.pushNamed(
                         context,
                         '/book_appointment',
                         arguments: {
                           'patientId': user['id'],
-                          'token': args!['token'],
+                          'token': token,
                           'user': user,
                         },
                       );
@@ -125,10 +125,15 @@ class HomePage extends StatelessWidget {
                       );
                     }
                   },
-                  child: quickAccessCard(Icons.calendar_today, "Book Consultation", "Schedule with our specialists"),
+                  child: quickAccessCard(Icons.calendar_month, "Book Appointment", "Schedule your visit"),
                 ),
                 const SizedBox(height: 10),
-                quickAccessCard(Icons.spa, "View Treatments", "Explore our services"),
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, '/view_treatments');
+                  },
+                  child: quickAccessCard(Icons.spa, "View Treatments", "Explore our services"),
+                ),
                 const SizedBox(height: 10),
                 InkWell(
                   onTap: () {
@@ -148,7 +153,7 @@ class HomePage extends StatelessWidget {
                       );
                     }
                   },
-                  child: quickAccessCard(Icons.assignment, "Medical Records", "Access your history"),
+                  child: quickAccessCard(Icons.assignment, "Appointments Status", "Access your history"),
                 ),
               ],
             ),

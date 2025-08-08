@@ -2,10 +2,10 @@
 
 class AppConfig {
   // Toggle this to switch between local and production
-  static const bool isProduction = true;
+  static const bool isProduction = false;
 
   // Local and production base URLs
-  static const String localBaseUrl = 'http://192.168.1.41:3000';
+  static const String localBaseUrl = 'http://192.168.1.112:3000';
   static const String productionBaseUrl = 'https://batobackend-production.up.railway.app';
 
   // Getter to return the active base URL
