@@ -25,7 +25,11 @@ class _BookNewPageState extends State<BookNewPage> {
   String? _time;
   DateTime? _selectedDate;
 
-  final List<String> services = ['Botox', 'Hair PRP', 'Facial'];
+  final List<String> services = ['Botox', 'Hair PRP', 'Facial','Hair Treatment 550+2'
+    'Hair Treatment-200', 'Hair Treatment half head +1', 'Hair Treatment full head +2',
+    'Hair Treatment - Renew Half Head', 'Hair Treatment - Renew full Head',
+    'Plasma', 'DERMAPEN MEZZO / PLASMA 1 SESSION', 'DERMAPEN MEZZO / PLASMA 3 SESSION'
+  ];
   final List<String> timeSlots = [
     '12:00 PM', '12:30 PM',
     '01:00 PM', '01:30 PM',

@@ -48,7 +48,7 @@ class FullViewTreatmentsScreen extends StatelessWidget {
                 treatment.name,
                 style: const TextStyle(fontWeight: FontWeight.bold),
               ),
-              subtitle: const Text("Status: Completed"),
+              // subtitle: const Text("Status: Completed"), // ❌ Commented out to hide status
               trailing: Text(
                 "${treatment.price.toStringAsFixed(3)} ${treatment.currency}",
                 style: const TextStyle(fontWeight: FontWeight.bold),
