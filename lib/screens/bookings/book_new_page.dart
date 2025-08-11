@@ -45,10 +45,19 @@ class _BookNewPageState extends State<BookNewPage> {
   ];
 
   int? _selectedDoctorId;
-
   bool isLoading = false;
 
-  // Helper: parse 12h time string to DateTime on given date
+  // Generate a unique appointment number
+  String generateAppointmentNumber() {
+    final now = DateTime.now();
+    return "APT${now.year}${now.month.toString().padLeft(2, '0')}"
+           "${now.day.toString().padLeft(2, '0')}"
+           "${now.hour.toString().padLeft(2, '0')}"
+           "${now.minute.toString().padLeft(2, '0')}"
+           "${now.second.toString().padLeft(2, '0')}"
+           "${now.millisecond}";
+  }
+
   DateTime _parseTime(String time12, DateTime date) {
     final timeParts = time12.split(' ');
     final hm = timeParts[0].split(':');
@@ -61,11 +70,9 @@ class _BookNewPageState extends State<BookNewPage> {
     } else if (period == 'AM' && hour == 12) {
       hour = 0;
     }
-
     return DateTime(date.year, date.month, date.day, hour, minute);
   }
 
-  // Helper: format DateTime to hh:mm AM/PM string
   String _formatTime(DateTime dt) {
     final hour = dt.hour > 12 ? dt.hour - 12 : dt.hour == 0 ? 12 : dt.hour;
     final minute = dt.minute.toString().padLeft(2, '0');
@@ -73,7 +80,6 @@ class _BookNewPageState extends State<BookNewPage> {
     return "$hour:$minute $period";
   }
 
-  // NEW helper: format DateTime to MySQL DATETIME string format
   String toMysqlDateTime(DateTime dt) {
     String twoDigits(int n) => n.toString().padLeft(2, '0');
     return "${dt.year}-${twoDigits(dt.month)}-${twoDigits(dt.day)} "
@@ -101,11 +107,10 @@ class _BookNewPageState extends State<BookNewPage> {
     final startDateTimeStr = "$appointmentDate ${_formatTime(startDateTime)}";
     final endDateTimeStr = "$appointmentDate ${_formatTime(endDateTime)}";
 
+    final String appointmentNumber = generateAppointmentNumber();
+
     print("📤 Sending appointment data...");
-    print("Token: ${widget.token}");
-    print("Date: $appointmentDate | Time: $_time");
-    print("👤 User data: ${widget.user}");
-    print("Doctor ID: $_selectedDoctorId");
+    print("Generated Appointment Number: $appointmentNumber");
 
     final response = await http.post(
       appointmentsUrl,
@@ -130,13 +135,12 @@ class _BookNewPageState extends State<BookNewPage> {
         "due_amount": "500",
         "appointment_start_date": appointmentDate,
         "appointment_end_date": appointmentDate,
-        // Use the new MySQL DATETIME format here:
         "appointment_start_time": toMysqlDateTime(startDateTime),
         "appointment_end_time": toMysqlDateTime(endDateTime),
         "appointment_start_between_end": "",
         "appointment_start_date_and_time": startDateTimeStr,
         "appointment_end_date_and_time": endDateTimeStr,
-        "appointment_number": "APT123456",
+        "appointment_number": appointmentNumber,
         "civil_id": widget.user['civilId'],
         "full_name": widget.user['name'],
         "dob": "1990-01-01",
@@ -174,7 +178,6 @@ class _BookNewPageState extends State<BookNewPage> {
     } else {
       final responseBody = json.decode(response.body);
       final message = responseBody['message'] ?? 'Booking failed';
-
       showDialog(
         context: context,
         builder: (ctx) => AlertDialog(

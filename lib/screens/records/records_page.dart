@@ -238,17 +238,6 @@ class _RecordsPageState extends State<RecordsPage> {
                 style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
               ),
             ),
-            Container(
-              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-              decoration: BoxDecoration(
-                color: statusColor.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(20),
-              ),
-              child: Text(
-                status,
-                style: TextStyle(color: statusColor, fontSize: 12, fontWeight: FontWeight.bold),
-              ),
-            )
           ],
         ),
         const SizedBox(height: 4),
@@ -259,7 +248,7 @@ class _RecordsPageState extends State<RecordsPage> {
         const SizedBox(height: 12),
         _buildInfoRow(Icons.calendar_today, "Date: $date"),
         _buildInfoRow(Icons.person, doctor),
-        _buildInfoRow(Icons.payment, "Payment: $paymentType ($paymentStatus)"),
+        // _buildInfoRow(Icons.payment, "Payment: $paymentType ($paymentStatus)"), // 💬 Payment row commented out
         _buildInfoRow(Icons.confirmation_number, "Appointment #: $appointmentNumber"),
         _buildInfoRow(Icons.folder_copy_outlined, "File #: $fileNumber"),
         const SizedBox(height: 14),
