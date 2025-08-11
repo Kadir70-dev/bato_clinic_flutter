@@ -14,7 +14,6 @@ class BookNewPage extends StatefulWidget {
     required this.token,
     required this.user,
   });
-
   @override
   State<BookNewPage> createState() => _BookNewPageState();
 }
@@ -74,6 +73,13 @@ class _BookNewPageState extends State<BookNewPage> {
     return "$hour:$minute $period";
   }
 
+  // NEW helper: format DateTime to MySQL DATETIME string format
+  String toMysqlDateTime(DateTime dt) {
+    String twoDigits(int n) => n.toString().padLeft(2, '0');
+    return "${dt.year}-${twoDigits(dt.month)}-${twoDigits(dt.day)} "
+           "${twoDigits(dt.hour)}:${twoDigits(dt.minute)}:${twoDigits(dt.second)}";
+  }
+
   Future<void> _bookAppointment() async {
     if (!_formKey.currentState!.validate()) return;
 
@@ -124,8 +130,9 @@ class _BookNewPageState extends State<BookNewPage> {
         "due_amount": "500",
         "appointment_start_date": appointmentDate,
         "appointment_end_date": appointmentDate,
-        "appointment_start_time": _formatTime(startDateTime),
-        "appointment_end_time": _formatTime(endDateTime),
+        // Use the new MySQL DATETIME format here:
+        "appointment_start_time": toMysqlDateTime(startDateTime),
+        "appointment_end_time": toMysqlDateTime(endDateTime),
         "appointment_start_between_end": "",
         "appointment_start_date_and_time": startDateTimeStr,
         "appointment_end_date_and_time": endDateTimeStr,
@@ -165,8 +172,21 @@ class _BookNewPageState extends State<BookNewPage> {
       );
       Navigator.pop(context);
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Booking failed: ${response.body}")),
+      final responseBody = json.decode(response.body);
+      final message = responseBody['message'] ?? 'Booking failed';
+
+      showDialog(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Booking Failed'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
       );
     }
   }
