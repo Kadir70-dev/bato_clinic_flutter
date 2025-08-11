@@ -28,22 +28,56 @@ class _BookNewPageState extends State<BookNewPage> {
 
   final List<String> services = ['Botox', 'Hair PRP', 'Facial'];
   final List<String> timeSlots = [
-  '12:00 PM', '12:30 PM',
-  '01:00 PM', '01:30 PM',
-  '02:00 PM', '02:30 PM',
-  '03:00 PM', '03:30 PM',
-  '04:00 PM', '04:30 PM',
-  '05:00 PM', '05:30 PM',
-  '06:00 PM', '06:30 PM',
-  '07:00 PM',
+    '12:00 PM', '12:30 PM',
+    '01:00 PM', '01:30 PM',
+    '02:00 PM', '02:30 PM',
+    '03:00 PM', '03:30 PM',
+    '04:00 PM', '04:30 PM',
+    '05:00 PM', '05:30 PM',
+    '06:00 PM', '06:30 PM',
+    '07:00 PM',
   ];
 
+  final List<Map<String, dynamic>> doctors = [
+    {"id": 1, "name": "Ouhoud amer kawas"},
+    {"id": 2, "name": "Sherry susan philip"},
+    {"id": 3, "name": "Kadir"},
+    {"id": 4, "name": "Treesa jose bbin"},
+  ];
+
+  int? _selectedDoctorId;
+
   bool isLoading = false;
+
+  // Helper: parse 12h time string to DateTime on given date
+  DateTime _parseTime(String time12, DateTime date) {
+    final timeParts = time12.split(' ');
+    final hm = timeParts[0].split(':');
+    int hour = int.parse(hm[0]);
+    final minute = int.parse(hm[1]);
+    final period = timeParts[1];
+
+    if (period == 'PM' && hour != 12) {
+      hour += 12;
+    } else if (period == 'AM' && hour == 12) {
+      hour = 0;
+    }
+
+    return DateTime(date.year, date.month, date.day, hour, minute);
+  }
+
+  // Helper: format DateTime to hh:mm AM/PM string
+  String _formatTime(DateTime dt) {
+    final hour = dt.hour > 12 ? dt.hour - 12 : dt.hour == 0 ? 12 : dt.hour;
+    final minute = dt.minute.toString().padLeft(2, '0');
+    final period = dt.hour >= 12 ? 'PM' : 'AM';
+    return "$hour:$minute $period";
+  }
 
   Future<void> _bookAppointment() async {
     if (!_formKey.currentState!.validate()) return;
 
-    if (_selectedDate == null || _time == null || _selectedService == null) {
+    if (_selectedDate == null || _time == null || _selectedService == null || _selectedDoctorId == null) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Please fill all fields")),
       );
@@ -54,13 +88,18 @@ class _BookNewPageState extends State<BookNewPage> {
 
     final appointmentsUrl = Uri.parse(AppConfig.appointmentsUrl);
     final appointmentDate = _selectedDate!.toIso8601String().split('T')[0];
-    final startDateTime = "$appointmentDate $_time";
-    final endDateTime = "$appointmentDate 11:00"; // You can make this dynamic
+
+    final startDateTime = _parseTime(_time!, _selectedDate!);
+    final endDateTime = startDateTime.add(const Duration(minutes: 30));
+
+    final startDateTimeStr = "$appointmentDate ${_formatTime(startDateTime)}";
+    final endDateTimeStr = "$appointmentDate ${_formatTime(endDateTime)}";
 
     print("📤 Sending appointment data...");
     print("Token: ${widget.token}");
     print("Date: $appointmentDate | Time: $_time");
     print("👤 User data: ${widget.user}");
+    print("Doctor ID: $_selectedDoctorId");
 
     final response = await http.post(
       appointmentsUrl,
@@ -75,7 +114,7 @@ class _BookNewPageState extends State<BookNewPage> {
         "time12": _time,
         "time24": _time,
         "note": _note ?? '',
-        "doctor_id": 3,
+        "doctor_id": _selectedDoctorId,
         "nurse_id": 4,
         "room_id": 5,
         "sub_total": "1000",
@@ -85,11 +124,11 @@ class _BookNewPageState extends State<BookNewPage> {
         "due_amount": "500",
         "appointment_start_date": appointmentDate,
         "appointment_end_date": appointmentDate,
-        "appointment_start_time": "10:00",
-        "appointment_end_time": "11:00",
+        "appointment_start_time": _formatTime(startDateTime),
+        "appointment_end_time": _formatTime(endDateTime),
         "appointment_start_between_end": "",
-        "appointment_start_date_and_time": startDateTime,
-        "appointment_end_date_and_time": endDateTime,
+        "appointment_start_date_and_time": startDateTimeStr,
+        "appointment_end_date_and_time": endDateTimeStr,
         "appointment_number": "APT123456",
         "civil_id": widget.user['civilId'],
         "full_name": widget.user['name'],
@@ -151,6 +190,18 @@ class _BookNewPageState extends State<BookNewPage> {
                 validator: (val) => val == null ? "Select a service" : null,
               ),
               const SizedBox(height: 12),
+
+              DropdownButtonFormField<int>(
+                decoration: const InputDecoration(labelText: "Doctor"),
+                items: doctors
+                    .map((d) => DropdownMenuItem(
+                        value: d['id'] as int, child: Text(d['name'])))
+                    .toList(),
+                onChanged: (val) => setState(() => _selectedDoctorId = val),
+                validator: (val) => val == null ? "Select a doctor" : null,
+              ),
+              const SizedBox(height: 12),
+
               DropdownButtonFormField<String>(
                 decoration: const InputDecoration(labelText: "Time Slot"),
                 items: timeSlots
@@ -160,12 +211,14 @@ class _BookNewPageState extends State<BookNewPage> {
                 validator: (val) => val == null ? "Select a time slot" : null,
               ),
               const SizedBox(height: 12),
+
               TextFormField(
                 decoration: const InputDecoration(labelText: "Note"),
                 maxLines: 3,
                 onChanged: (val) => _note = val,
               ),
               const SizedBox(height: 12),
+
               ElevatedButton.icon(
                 onPressed: () async {
                   final picked = await showDatePicker(

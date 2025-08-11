@@ -22,7 +22,12 @@ class RecordsPage extends StatefulWidget {
 class _RecordsPageState extends State<RecordsPage> {
   int selectedTab = 0;
   final List<String> tabs = ["Medical reports", "Prescriptions","Invoices"];
-
+  final Map<int, String> doctorNames = {
+    1: "Ouhoud amer kawas",
+    2: "Sherry susan philip",
+    3: "Kadir",
+    4: "Treesa jose bbin",
+  };
   List<dynamic> appointments = [];
   bool isLoading = true;
 
@@ -160,7 +165,7 @@ class _RecordsPageState extends State<RecordsPage> {
                 title: appt['description'] ?? 'Appointment',
                 subtitle: "Service ID: ${appt['service_id']}",
                 date: appt['date'] ?? '',
-                doctor: "Doctor ID: ${appt['doctor_id']}",
+                doctor: "Doctor: ${doctorNames[appt['doctor_id']]}",
                 status: appt['appointment_status'] ?? 'Unknown',
                 statusColor: _getStatusColor(appt['appointment_status']),
                 paymentStatus: appt['payment_status'] ?? 'N/A',
